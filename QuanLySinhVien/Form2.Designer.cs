@@ -1,4 +1,4 @@
-﻿namespace qlSinhVien
+﻿namespace qlSinhVien.QuanLySinhVien
 {
     partial class Form2
     {

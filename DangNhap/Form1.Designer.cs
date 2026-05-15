@@ -1,4 +1,4 @@
-﻿namespace qlSinhVien
+﻿namespace qlSinhVien.DangNhap
 {
     partial class Form1
     {

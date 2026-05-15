@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace qlSinhVien
+namespace qlSinhVien.QuanLySinhVien
 {
     public partial class Form2 : Form
     {

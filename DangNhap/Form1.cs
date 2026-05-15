@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using qlSinhVien.QuanLySinhVien;
 
-namespace qlSinhVien
+namespace qlSinhVien.DangNhap
 {
     public partial class Form1 : Form
     {
