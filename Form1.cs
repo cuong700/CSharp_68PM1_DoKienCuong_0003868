@@ -35,19 +35,14 @@ namespace qlSinhVien
 
             if (email == emailSV && matKhau == matKhauSV)
             {
-                MessageBox.Show("Đăng nhập thành công!\nChào mừng: " + email,
-                                "Thành công",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+                Form2 form2 = new Form2();
+                form2.Show();
+                this.Hide();
             }
             else
             {
                 MessageBox.Show("Đăng nhập thất bại!\nEmail hoặc mật khẩu không đúng.",
-                                "Thất bại",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-
-                txtPassword.Clear();
+                    "Thất bại", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtPassword.Focus();
             }
         }
