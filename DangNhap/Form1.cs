@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using qlSinhVien.QuanLySinhVien;
+using qlSinhVien.MainWindow;
 
 namespace qlSinhVien.DangNhap
 {
     public partial class Form1 : Form
     {
-        private const string emailSV = "0003868@st.huce.edu.vn"; 
+        private const string emailSV = "0003868@st.huce.edu.vn";
         private const string matKhauSV = "0003868";
+
         public Form1()
         {
             InitializeComponent();
@@ -36,7 +30,7 @@ namespace qlSinhVien.DangNhap
 
             if (email == emailSV && matKhau == matKhauSV)
             {
-                Form2 form2 = new Form2();
+                MainForm form2 = new MainForm();
                 form2.Show();
                 this.Hide();
             }
@@ -73,7 +67,5 @@ namespace qlSinhVien.DangNhap
         {
 
         }
-
-     
     }
 }

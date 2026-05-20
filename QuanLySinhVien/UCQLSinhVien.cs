@@ -1,14 +1,12 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Reflection.Emit;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace qlSinhVien.QuanLySinhVien
 {
-    public partial class Form2 : Form
+    public partial class UCQLSinhVien : UserControl
     {
         private List<SinhVien> danhSachSV = new List<SinhVien>();
         private List<string> danhSachLop = new List<string>();
@@ -16,7 +14,7 @@ namespace qlSinhVien.QuanLySinhVien
         private const int soDongMotTrang = 10;
         private List<SinhVien> danhSachHienThi = new List<SinhVien>();
 
-        public Form2()
+        public UCQLSinhVien()
         {
             InitializeComponent();
             KhoiTaoDuLieuMau();
@@ -24,7 +22,7 @@ namespace qlSinhVien.QuanLySinhVien
             HienThiDanhSach(danhSachSV);
         }
 
-        private void Form2_Load(object sender, EventArgs e) { }
+        private void UC_SinhVien_Load(object sender, EventArgs e) { }
 
         private void KhoiTaoDuLieuMau()
         {
@@ -77,19 +75,63 @@ namespace qlSinhVien.QuanLySinhVien
             textBox1.Focus();
         }
 
+        // Nút Thêm
+        private void button1_Click(object sender, EventArgs e) { }
+
+        // Nút Sửa
+        private void button2_Click(object sender, EventArgs e) { }
+
+        // Nút Xóa
+        private void button3_Click(object sender, EventArgs e) { }
+
+        // Nút Làm mới
+        private void button4_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        // Nút Tìm
+        private void button5_Click(object sender, EventArgs e) { }
+
+        // Nút << (Trang đầu)
+        private void button6_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        // Nút < (Trang trước)
+        private void button7_Click(object sender, EventArgs e)
+        {
+          
+        }
+
+        // Nút > (Trang sau)
+        private void button9_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        // Nút >> (Trang cuối)
+        private void button8_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        public class SinhVien
+        {
+            public string MaSV { get; set; }
+            public string HoTen { get; set; }
+            public string GioiTinh { get; set; }
+            public DateTime NgaySinh { get; set; }
+            public string Lop { get; set; }
+        }
+
         private void label1_Click(object sender, EventArgs e) { }
         private void label4_Click(object sender, EventArgs e) { }
         private void label5_Click(object sender, EventArgs e) { }
         private void label7_Click(object sender, EventArgs e) { }
-        private void sinhVienToolStripMenuItem_Click(object sender, EventArgs e) { }
-    }
 
-    public class SinhVien
-    {
-        public string MaSV { get; set; }
-        public string HoTen { get; set; }
-        public string GioiTinh { get; set; }
-        public DateTime NgaySinh { get; set; }
-        public string Lop { get; set; }
+       
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e) { }
     }
 }
