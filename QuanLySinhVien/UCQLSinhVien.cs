@@ -1,137 +1,216 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Emit;
+using System.Linq;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace qlSinhVien.QuanLySinhVien
 {
     public partial class UCQLSinhVien : UserControl
     {
-        private List<SinhVien> danhSachSV = new List<SinhVien>();
-        private List<string> danhSachLop = new List<string>();
-        private int trangHienTai = 1;
+        DataBaseDataContext db = new DataBaseDataContext();
+
         private const int soDongMotTrang = 10;
-        private List<SinhVien> danhSachHienThi = new List<SinhVien>();
+        private int trangHienTai = 1;
+
+        private List<tbl_sinhvien> danhSachHienThi = new List<tbl_sinhvien>();
 
         public UCQLSinhVien()
         {
             InitializeComponent();
-            KhoiTaoDuLieuMau();
-            NapDanhSachLop();
-            HienThiDanhSach(danhSachSV);
         }
 
-        private void UC_SinhVien_Load(object sender, EventArgs e) { }
-
-        private void KhoiTaoDuLieuMau()
+        private void UC_SinhVien_Load(object sender, EventArgs e)
         {
-            danhSachLop.Add("68PM1");
-            danhSachLop.Add("68PM2");
-            danhSachLop.Add("68PM3");
+            try
+            {
+                dateTimePicker1.Format = DateTimePickerFormat.Custom;
+                dateTimePicker1.CustomFormat = "dd/MM/yyyy";
 
-            danhSachSV.Add(new SinhVien { MaSV = "1", HoTen = "cuong", GioiTinh = "Nam", NgaySinh = new DateTime(2026, 7, 2), Lop = "68PM1" });
-            danhSachSV.Add(new SinhVien { MaSV = "2", HoTen = "Nguyễn Văn B", GioiTinh = "Nam", NgaySinh = new DateTime(2026, 3, 11), Lop = "68PM2" });
-            danhSachSV.Add(new SinhVien { MaSV = "3", HoTen = "Trần Văn C", GioiTinh = "Nam", NgaySinh = new DateTime(2026, 3, 21), Lop = "68PM2" });
+                comboBox1.Items.Clear();
+                comboBox1.Items.Add("Nam");
+                comboBox1.Items.Add("Nữ");
+
+                LoadDSLH();
+                LoadData();
+
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message);
+            }
         }
 
-        private void NapDanhSachLop()
+        public void LoadData()
         {
-            comboBox2.Items.Clear();
-            foreach (var lop in danhSachLop)
-                comboBox2.Items.Add(lop);
-            if (comboBox2.Items.Count > 0)
+            try
+            {
+                List<tbl_sinhvien> dsSV = db.tbl_sinhviens.ToList();
+
+                HienThiDanhSach(dsSV);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Không thể tải danh sách sinh viên: " + ex.Message);
+            }
+        }
+
+        public void LoadDSLH()
+        {
+            try
+            {
+                List<tbl_lophoc> dsLH = db.tbl_lophocs.ToList();
+
+                comboBox2.DataSource = dsLH;
+                comboBox2.DisplayMember = "tenlop";
+                comboBox2.ValueMember = "malop";
+
                 comboBox2.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Không thể tải danh sách lớp học: " + ex.Message);
+            }
         }
 
-        private void HienThiDanhSach(List<SinhVien> ds)
+        private void HienThiDanhSach(List<tbl_sinhvien> ds)
         {
             danhSachHienThi = ds;
+
             int tongBanGhi = ds.Count;
+
             int tongTrang = (int)Math.Ceiling((double)tongBanGhi / soDongMotTrang);
-            if (tongTrang == 0) tongTrang = 1;
-            if (trangHienTai > tongTrang) trangHienTai = tongTrang;
+
+            if (tongTrang == 0)
+                tongTrang = 1;
+
+            if (trangHienTai > tongTrang)
+                trangHienTai = tongTrang;
 
             int batDau = (trangHienTai - 1) * soDongMotTrang;
+
             int ketThuc = Math.Min(batDau + soDongMotTrang, tongBanGhi);
 
             dataGridView1.Rows.Clear();
+
             for (int i = batDau; i < ketThuc; i++)
             {
                 var sv = ds[i];
-                dataGridView1.Rows.Add(sv.MaSV, sv.HoTen, sv.GioiTinh, sv.NgaySinh.ToString("dd/MM/yyyy"), sv.Lop);
+
+                dataGridView1.Rows.Add(
+                    sv.id,
+                    sv.hoten,
+                    sv.gioitinh,
+                    sv.ngaysinh?.ToString("dd/MM/yyyy"),
+                    sv.malop
+                );
             }
 
-            label7.Text = $"Trang {trangHienTai}/{tongTrang}  |  {tongBanGhi} bản ghi";
+            label7.Text = $"Trang {trangHienTai}/{tongTrang} | {tongBanGhi} bản ghi";
         }
 
-        private void LamMoiForm()
+        //Nút thêm
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(textBox1.Text))
+                {
+                    MessageBox.Show("Mã sinh viên không được để trống!");
+                    return;
+                }
+
+                int maSV;
+
+                if (!int.TryParse(textBox1.Text.Trim(), out maSV))
+                {
+                    MessageBox.Show("Mã sinh viên phải là số!");
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(textBox2.Text))
+                {
+                    MessageBox.Show("Họ tên không được để trống!");
+                    return;
+                }
+
+                var check = db.tbl_sinhviens.FirstOrDefault(x => x.id == maSV);
+
+                if (check != null)
+                {
+                    MessageBox.Show("Mã sinh viên đã tồn tại!");
+                    return;
+                }
+
+                tbl_sinhvien sv = new tbl_sinhvien();
+
+                sv.id = maSV;
+                sv.hoten = textBox2.Text.Trim();
+                sv.gioitinh = comboBox1.Text;
+                sv.ngaysinh = dateTimePicker1.Value;
+                sv.malop = comboBox2.SelectedValue.ToString();
+
+                db.tbl_sinhviens.InsertOnSubmit(sv);
+
+                db.SubmitChanges();
+
+                MessageBox.Show("Thêm sinh viên thành công!");
+
+                ClearForm();
+
+                LoadData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi thêm sinh viên: " + ex.Message);
+            }
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+
+                textBox1.Text = row.Cells[0].Value?.ToString();
+                textBox2.Text = row.Cells[1].Value?.ToString();
+
+                comboBox1.Text = row.Cells[2].Value?.ToString();
+
+                DateTime ngaySinh;
+        if (DateTime.TryParseExact(
+                row.Cells[3].Value?.ToString(),
+                "dd/MM/yyyy",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None,
+                out ngaySinh))
+        {
+            dateTimePicker1.Value = ngaySinh;
+        }
+
+                comboBox2.SelectedValue = row.Cells[4].Value?.ToString();
+            }
+        }
+
+        private void ClearForm()
         {
             textBox1.Clear();
             textBox2.Clear();
-            dateTimePicker1.Value = DateTime.Today;
-            comboBox1.SelectedIndex = 0;
-            if (comboBox2.Items.Count > 0) comboBox2.SelectedIndex = 0;
-            textBox1.Focus();
-        }
 
-        // Nút Thêm
-        private void button1_Click(object sender, EventArgs e) { }
+            comboBox1.SelectedIndex = -1;
 
-        // Nút Sửa
-        private void button2_Click(object sender, EventArgs e) { }
+            if (comboBox2.Items.Count > 0)
+                comboBox2.SelectedIndex = 0;
 
-        // Nút Xóa
-        private void button3_Click(object sender, EventArgs e) { }
-
-        // Nút Làm mới
-        private void button4_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        // Nút Tìm
-        private void button5_Click(object sender, EventArgs e) { }
-
-        // Nút << (Trang đầu)
-        private void button6_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        // Nút < (Trang trước)
-        private void button7_Click(object sender, EventArgs e)
-        {
-          
-        }
-
-        // Nút > (Trang sau)
-        private void button9_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        // Nút >> (Trang cuối)
-        private void button8_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        public class SinhVien
-        {
-            public string MaSV { get; set; }
-            public string HoTen { get; set; }
-            public string GioiTinh { get; set; }
-            public DateTime NgaySinh { get; set; }
-            public string Lop { get; set; }
+            dateTimePicker1.Value = DateTime.Now;
         }
 
         private void label1_Click(object sender, EventArgs e) { }
-        private void label4_Click(object sender, EventArgs e) { }
-        private void label5_Click(object sender, EventArgs e) { }
-        private void label7_Click(object sender, EventArgs e) { }
 
-       
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e) { }
+        private void label4_Click(object sender, EventArgs e) { }
+
+        private void label5_Click(object sender, EventArgs e) { }
+
+        private void label7_Click(object sender, EventArgs e) { }
     }
 }

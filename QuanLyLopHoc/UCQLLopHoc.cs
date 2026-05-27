@@ -1,34 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Emit;
+using System.Linq;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace qlSinhVien.QuanLyLopHoc
 {
     public partial class UCQLLopHoc : UserControl
     {
-        private List<LopHoc> danhSachLop = new List<LopHoc>();
+        DataBaseDataContext db = new DataBaseDataContext();
+
         private int trangHienTai = 1;
         private const int soDongMotTrang = 10;
-        private List<LopHoc> danhSachHienThi = new List<LopHoc>();
+
+        private List<tbl_lophoc> danhSachHienThi = new List<tbl_lophoc>();
+
 
         public UCQLLopHoc()
         {
             InitializeComponent();
-            KhoiTaoDuLieuMau();
+
+            var danhSachLop = db.tbl_lophocs.ToList();
+
             HienThiDanhSach(danhSachLop);
         }
 
         private void UC_LopHoc_Load(object sender, EventArgs e) { }
 
-        private void KhoiTaoDuLieuMau()
-        {
-            danhSachLop.Add(new LopHoc { MaID = 1, MaLop = "68PM1", TenLop = "Lớp 68PM1", GhiChu = "abc" });
-            danhSachLop.Add(new LopHoc { MaID = 2, MaLop = "68PM2", TenLop = "Lớp 68PM2", GhiChu = "xyz" });
-        }
 
-        private void HienThiDanhSach(List<LopHoc> ds)
+        private void HienThiDanhSach(List<tbl_lophoc> ds)
         {
             danhSachHienThi = ds;
             int tongBanGhi = ds.Count;
@@ -43,20 +42,18 @@ namespace qlSinhVien.QuanLyLopHoc
             for (int i = batDau; i < ketThuc; i++)
             {
                 var lop = ds[i];
-                dataGridView1.Rows.Add(lop.MaID, lop.MaLop, lop.TenLop, lop.GhiChu);
+
+                dataGridView1.Rows.Add(
+                    lop.id,
+                    lop.malop,
+                    lop.tenlop,
+                    lop.ghichu
+                );
             }
 
             label7.Text = $"Trang {trangHienTai}/{tongTrang}  |  {tongBanGhi} bản ghi";
         }
 
-        private void LamMoiForm()
-        {
-            txtMaID.Clear();
-            txtMaLop.Clear();
-            txtTenLop.Clear();
-            txtGhiChu.Clear();
-            txtMaLop.Focus();
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {

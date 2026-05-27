@@ -205,7 +205,6 @@
             this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button2.UseVisualStyleBackColor = false;
             this.button2.TabIndex = 3;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             //
             // button3 (Xóa)
             //
@@ -221,7 +220,6 @@
             this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button3.UseVisualStyleBackColor = false;
             this.button3.TabIndex = 4;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             //
             // button4 (Làm mới)
             //
@@ -237,7 +235,6 @@
             this.button4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button4.UseVisualStyleBackColor = false;
             this.button4.TabIndex = 5;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             //
             // label6 (Tìm kiếm)
             //
@@ -271,7 +268,6 @@
             this.button5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button5.UseVisualStyleBackColor = false;
             this.button5.TabIndex = 8;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
             //
             // dataGridView1
             //
@@ -323,7 +319,6 @@
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button6.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button6.TabIndex = 10;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
             //
             // button7 (<)
             //
@@ -335,7 +330,6 @@
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button7.TabIndex = 11;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
             //
             // label7 (Trang x/x)
             //
@@ -359,7 +353,6 @@
             this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button9.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button9.TabIndex = 12;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
             //
             // button8 (>>)
             //
@@ -371,7 +364,6 @@
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button8.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button8.TabIndex = 13;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
             //
             // UCQLSinhVien
             //
