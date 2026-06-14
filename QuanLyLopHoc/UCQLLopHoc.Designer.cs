@@ -227,7 +227,6 @@
             this.button10.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button10.UseVisualStyleBackColor = false;
             this.button10.TabIndex = 6;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
             //
             // label6 (Tìm kiếm)
             //
