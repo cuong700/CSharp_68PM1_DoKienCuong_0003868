@@ -166,30 +166,46 @@ namespace qlSinhVien.QuanLySinhVien
             }
         }
 
+        private int? maSVDangChon = null;
+
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+
+            string maSVStr = row.Cells[0].Value?.ToString();
+
+            if (int.TryParse(maSVStr, out int maSV))
             {
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
-
-                textBox1.Text = row.Cells[0].Value?.ToString();
-                textBox2.Text = row.Cells[1].Value?.ToString();
-
-                comboBox1.Text = row.Cells[2].Value?.ToString();
-
-                DateTime ngaySinh;
-        if (DateTime.TryParseExact(
-                row.Cells[3].Value?.ToString(),
-                "dd/MM/yyyy",
-                System.Globalization.CultureInfo.InvariantCulture,
-                System.Globalization.DateTimeStyles.None,
-                out ngaySinh))
-        {
-            dateTimePicker1.Value = ngaySinh;
-        }
-
-                comboBox2.SelectedValue = row.Cells[4].Value?.ToString();
+                maSVDangChon = maSV;
+                textBox1.Text = maSVStr;
             }
+
+            textBox2.Text = row.Cells[1].Value?.ToString();
+
+            string gioiTinh = row.Cells[2].Value?.ToString();
+            if (!string.IsNullOrEmpty(gioiTinh) && comboBox1.Items.Contains(gioiTinh))
+                comboBox1.SelectedItem = gioiTinh;
+            else
+                comboBox1.SelectedIndex = -1;
+
+            DateTime ngaySinh;
+            if (DateTime.TryParseExact(
+                    row.Cells[3].Value?.ToString(),
+                    "dd/MM/yyyy",
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None,
+                    out ngaySinh))
+            {
+                dateTimePicker1.Value = ngaySinh;
+            }
+
+            string malop = row.Cells[4].Value?.ToString();
+            if (!string.IsNullOrEmpty(malop))
+                comboBox2.SelectedValue = malop;
+
+            textBox1.ReadOnly = true;
         }
 
         private void ClearForm()
@@ -203,6 +219,9 @@ namespace qlSinhVien.QuanLySinhVien
                 comboBox2.SelectedIndex = 0;
 
             dateTimePicker1.Value = DateTime.Now;
+
+            textBox1.ReadOnly = false;
+            maSVDangChon = null;
         }
 
         private void label1_Click(object sender, EventArgs e) { }
