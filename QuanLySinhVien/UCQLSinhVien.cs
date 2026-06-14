@@ -11,6 +11,7 @@ namespace qlSinhVien.QuanLySinhVien
 
         private const int soDongMotTrang = 10;
         private int trangHienTai = 1;
+        private int? maSVDangChon = null;
 
         private List<tbl_sinhvien> danhSachHienThi = new List<tbl_sinhvien>();
 
@@ -166,7 +167,61 @@ namespace qlSinhVien.QuanLySinhVien
             }
         }
 
-        private int? maSVDangChon = null;
+        //Nút sửa
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (maSVDangChon == null)
+                {
+                    MessageBox.Show("Vui lòng chọn một sinh viên để sửa!");
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(textBox2.Text))
+                {
+                    MessageBox.Show("Họ tên không được để trống!");
+                    return;
+                }
+
+                if (comboBox1.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Vui lòng chọn giới tính!");
+                    return;
+                }
+
+                if (comboBox2.SelectedValue == null)
+                {
+                    MessageBox.Show("Vui lòng chọn lớp!");
+                    return;
+                }
+
+                var sv = db.tbl_sinhviens.FirstOrDefault(x => x.id == maSVDangChon.Value);
+
+                if (sv == null)
+                {
+                    MessageBox.Show("Không tìm thấy sinh viên!");
+                    return;
+                }
+
+                sv.hoten = textBox2.Text.Trim();
+                sv.gioitinh = comboBox1.Text;
+                sv.ngaysinh = dateTimePicker1.Value;
+                sv.malop = comboBox2.SelectedValue.ToString();
+
+                db.SubmitChanges();
+
+                MessageBox.Show("Cập nhật sinh viên thành công!");
+
+                ClearForm();
+
+                LoadData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi sửa sinh viên: " + ex.Message);
+            }
+        }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
