@@ -214,6 +214,21 @@ namespace qlSinhVien.QuanLyLopHoc
             LoadData();
         }
 
+        //Nút xem danh sách sinh viên
+        private void button10_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(maLopDangChon))
+            {
+                MessageBox.Show("Vui lòng chọn một lớp học để xem danh sách sinh viên!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (ClassroomStudentsForm modal = new ClassroomStudentsForm(maLopDangChon))
+            {
+                modal.ShowDialog(this);
+            }
+        }
+
         //Nút tìm kiếm
         private void button5_Click(object sender, EventArgs e)
         {
