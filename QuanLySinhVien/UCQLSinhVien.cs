@@ -267,6 +267,95 @@ namespace qlSinhVien.QuanLySinhVien
             }
         }
 
+        //Nút tìm kiếm
+        private void button5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string tuKhoa = textBox3.Text.Trim().ToLower();
+
+                List<tbl_sinhvien> dsGoc = db.tbl_sinhviens.ToList();
+
+                List<tbl_sinhvien> dsKetQua;
+
+                if (string.IsNullOrEmpty(tuKhoa))
+                {
+                    dsKetQua = dsGoc;
+                }
+                else
+                {
+                    dsKetQua = dsGoc.Where(sv =>
+                        (sv.hoten != null && sv.hoten.ToLower().Contains(tuKhoa)) ||
+                        (sv.id.ToString().Contains(tuKhoa)) ||
+                        (sv.malop != null && sv.malop.ToLower().Contains(tuKhoa))
+                    ).ToList();
+                }
+
+                trangHienTai = 1;
+
+                HienThiDanhSach(dsKetQua);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi tìm kiếm: " + ex.Message);
+            }
+        }
+
+        //Nút <<
+        private void button6_Click(object sender, EventArgs e)
+        {
+            trangHienTai = 1;
+            HienThiDanhSach(danhSachHienThi);
+        }
+
+        //Nút < 
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (trangHienTai > 1)
+            {
+                trangHienTai--;
+                HienThiDanhSach(danhSachHienThi);
+            }
+        }
+
+        //Nút > 
+        private void button9_Click(object sender, EventArgs e)
+        {
+            int tongTrang = (int)Math.Ceiling((double)danhSachHienThi.Count / soDongMotTrang);
+
+            if (tongTrang == 0)
+                tongTrang = 1;
+
+            if (trangHienTai < tongTrang)
+            {
+                trangHienTai++;
+                HienThiDanhSach(danhSachHienThi);
+            }
+        }
+
+        //Nút >> 
+        private void button8_Click(object sender, EventArgs e)
+        {
+            int tongTrang = (int)Math.Ceiling((double)danhSachHienThi.Count / soDongMotTrang);
+
+            if (tongTrang == 0)
+                tongTrang = 1;
+
+            trangHienTai = tongTrang;
+
+            HienThiDanhSach(danhSachHienThi);
+        }
+
+        //Nút làm mới
+        private void button4_Click(object sender, EventArgs e)
+        {
+            textBox3.Clear();
+
+            ClearForm();
+
+            LoadData();
+        }
+
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
