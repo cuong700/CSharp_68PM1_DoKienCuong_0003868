@@ -223,6 +223,50 @@ namespace qlSinhVien.QuanLySinhVien
             }
         }
 
+        //Nút xóa
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (maSVDangChon == null)
+                {
+                    MessageBox.Show("Vui lòng chọn một sinh viên để xóa!");
+                    return;
+                }
+
+                var sv = db.tbl_sinhviens.FirstOrDefault(x => x.id == maSVDangChon.Value);
+
+                if (sv == null)
+                {
+                    MessageBox.Show("Không tìm thấy sinh viên!");
+                    return;
+                }
+
+                DialogResult result = MessageBox.Show(
+                    $"Bạn có chắc muốn xóa sinh viên \"{sv.hoten}\" (Mã SV: {sv.id})?",
+                    "Xác nhận xóa",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result != DialogResult.Yes)
+                    return;
+
+                db.tbl_sinhviens.DeleteOnSubmit(sv);
+
+                db.SubmitChanges();
+
+                MessageBox.Show("Xóa sinh viên thành công!");
+
+                ClearForm();
+
+                LoadData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi xóa sinh viên: " + ex.Message);
+            }
+        }
+
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
